@@ -14,6 +14,31 @@ If an operator key is stolen, the attacker can take at most one window's cap bef
 
 The pattern is the Soroban version of ERC-7265 (circuit breaker) and of the flow limits inside Axelar's Interchain Token Service. Floodgate makes it a standalone, reusable contract that any project can put in front of its funds.
 
+## Live on testnet
+
+| | |
+|---|---|
+| Vault contract | [`CDEEGPERHQE6XOBVG7T4ZHFG4V3VN5ZGUAA6IMTDTTC2454EO4FX6IOH`](https://stellar.expert/explorer/testnet/contract/CDEEGPERHQE6XOBVG7T4ZHFG4V3VN5ZGUAA6IMTDTTC2454EO4FX6IOH) |
+| Token | Native XLM (`CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC`) |
+| Admin, guardian, operator | `GCE62FKPTE6NS4PZFBULJ42VB7CDHAW44QYX7HN6WA3ZBUTQU4FB3GAC` (test identity) |
+| Limits | 1,000 XLM instant cap per hour. Releases of 500 XLM or more wait 15 minutes. |
+
+The vault holds test XLM and has real activity: instant payouts, a queued release and a cancelled one. The web app in `ui/` points at this vault by default.
+
+### Try it
+
+1. Install [Freighter](https://freighter.app) and switch it to testnet.
+2. Fund your testnet account with friendbot in [Stellar Lab](https://lab.stellar.org).
+3. Start the app and open the console:
+
+   ```sh
+   cd ui && npm install && npm run dev
+   ```
+
+4. Anyone can deposit and pay out an unlocked release. Release, cancel, pause and limit changes need the role addresses above, so they fail from your own account. To try them, deploy your own vault with `scripts/deploy-testnet.sh`, where your test identity holds every role.
+
+Prefer no wallet? Press **Explore the live demo** on the landing page for sample data.
+
 ## How it works
 
 ```
