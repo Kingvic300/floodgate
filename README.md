@@ -86,9 +86,9 @@ cargo test               # 9 unit tests, native
 stellar contract build   # wasm in target/wasm32v1-none/release/
 ```
 
-## Deploy to mainnet
+## Deploy
 
-See [DEPLOY.md](DEPLOY.md). `scripts/deploy-mainnet.sh` builds, shows a summary, asks for confirmation and deploys with your own stellar-cli key. It also points the web app at the new contract.
+See [DEPLOY.md](DEPLOY.md). `scripts/deploy-testnet.sh` deploys to testnet with a funded test identity. `scripts/deploy-mainnet.sh` deploys with your own stellar-cli key after a confirmation. Both point the web app at the new contract.
 
 ## Web UI
 
