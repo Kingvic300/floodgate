@@ -72,7 +72,9 @@ export function Landing() {
   return (
     <div className="mk">
       <div className="announce">
-        Open source and live on Stellar testnet.{" "}
+        {import.meta.env.VITE_NETWORK === "mainnet"
+          ? "Beta on Stellar mainnet. Not yet audited, so start with small amounts."
+          : "Open source and live on Stellar testnet."}{" "}
         <a href={REPO} target="_blank" rel="noreferrer">
           Read the contract
         </a>

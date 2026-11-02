@@ -84,6 +84,12 @@ export const WALLETS: WalletOption[] = [
   },
 ];
 
+/** Network the app starts on. Production builds made by the deploy script set VITE_NETWORK=mainnet. */
+const DEFAULT_NET: NetSettings =
+  import.meta.env.VITE_NETWORK === "mainnet"
+    ? { ...PRESETS.mainnet, rpcUrl: (import.meta.env.VITE_RPC_URL as string | undefined) ?? "" }
+    : PRESETS.testnet;
+
 interface Session {
   walletId?: WalletId;
   address?: string;
@@ -106,7 +112,7 @@ interface WalletContextValue {
 const WalletContext = createContext<WalletContextValue | null>(null);
 
 export function WalletProvider(props: { storageKey: string; children: ReactNode }) {
-  const [session, setSession] = useState<Session>(() => loadJSON<Session>(props.storageKey, { net: PRESETS.testnet }));
+  const [session, setSession] = useState<Session>(() => loadJSON<Session>(props.storageKey, { net: DEFAULT_NET }));
 
   useEffect(() => saveJSON(props.storageKey, session), [props.storageKey, session]);
 

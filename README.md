@@ -86,6 +86,10 @@ cargo test               # 9 unit tests, native
 stellar contract build   # wasm in target/wasm32v1-none/release/
 ```
 
+## Deploy to mainnet
+
+See [DEPLOY.md](DEPLOY.md). `scripts/deploy-mainnet.sh` builds, shows a summary, asks for confirmation and deploys with your own stellar-cli key. It also points the web app at the new contract.
+
 ## Web UI
 
 `ui/` holds Floodgate Console: a web console that shows how much can leave the vault now, lists waiting releases, and runs deposit, release, pay out, cancel, pause and resume through Freighter. See [ui/README.md](ui/README.md).
