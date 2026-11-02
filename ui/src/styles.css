@@ -611,3 +611,99 @@ mark { background: var(--hl); color: var(--ink); padding: 0 3px; border-radius: 
 .cta-card { margin-left: 0; margin-right: 0; }
 .content { max-width: none; }
 @media (max-width: 900px) { .mk-nav { padding: 10px 12px 0; } }
+
+/* =========================================================
+   Futuristic sidebar
+   ========================================================= */
+:root { --glow: #38bdf8; --glow-2: #0ea5e9; --side-bg: #070d16; }
+.shell { grid-template-columns: 264px minmax(0, 1fr); }
+.side {
+  position: sticky; top: 0; height: 100vh; overflow: hidden; isolation: isolate;
+  display: flex; flex-direction: column; gap: 18px; padding: 20px 14px 14px;
+  background:
+    radial-gradient(140% 50% at 0% 0%, color-mix(in srgb, var(--glow) 22%, transparent), transparent 60%),
+    radial-gradient(120% 40% at 100% 100%, color-mix(in srgb, var(--glow-2) 14%, transparent), transparent 60%),
+    linear-gradient(180deg, #0b1422, var(--side-bg));
+  border-right: 1px solid rgba(255, 255, 255, .06); color: #c9d4e2;
+}
+.side::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .5;
+  background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size: 24px 24px; mask-image: linear-gradient(180deg, #000, transparent 70%);
+}
+.side-glow { position: absolute; z-index: -1; top: -80px; left: -60px; width: 220px; height: 220px; border-radius: 50%; background: var(--glow); filter: blur(90px); opacity: .22; pointer-events: none; }
+.side .brand { color: #fff; padding: 4px 8px 10px; }
+.side .brand-word { color: #fff; }
+.side-nav { display: grid; gap: 4px; }
+.side-link {
+  position: relative; display: flex; align-items: center; gap: 12px; padding: 7px 10px 7px 7px; border-radius: 12px;
+  color: #93a3b8; text-decoration: none; font-size: 14.5px; font-weight: 500; border: 1px solid transparent;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.side-link:hover { background: rgba(255, 255, 255, .04); color: #e6edf5; }
+.side-ico {
+  width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; flex: none;
+  background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .07); color: #8fa1b7; transition: all .2s;
+}
+.side-link svg { color: inherit; }
+.side-label { flex: 1; }
+.side-link kbd {
+  font: 500 11px var(--mono); color: #6b7c91; border: 1px solid rgba(255,255,255,.1); border-bottom-width: 2px;
+  border-radius: 5px; padding: 1px 6px; opacity: 0; transition: opacity .2s;
+}
+.side-link:hover kbd, .side-link.on kbd { opacity: 1; }
+.side-badge { font-size: 11.5px; font-weight: 600; min-width: 20px; text-align: center; padding: 1px 6px; border-radius: 999px; background: #f59e0b; color: #1a1205; }
+.side-link.on {
+  color: #fff; background: linear-gradient(90deg, color-mix(in srgb, var(--glow) 18%, transparent), rgba(255,255,255,.02));
+  border-color: color-mix(in srgb, var(--glow) 28%, transparent); box-shadow: none;
+}
+.side-link.on::before {
+  content: ""; position: absolute; left: -14px; top: 9px; bottom: 9px; width: 3px; border-radius: 0 3px 3px 0;
+  background: var(--glow); box-shadow: 0 0 14px 2px var(--glow);
+}
+.side-link.on .side-ico {
+  color: #fff; border-color: transparent;
+  background: linear-gradient(135deg, var(--glow), var(--glow-2)); box-shadow: 0 6px 18px -6px var(--glow);
+}
+
+.side-card {
+  margin-top: auto; display: grid; gap: 10px; padding: 14px; border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border: 1px solid rgba(255, 255, 255, .08); backdrop-filter: blur(10px);
+}
+.side-card-row { display: flex; align-items: center; gap: 8px; }
+.side-card-title { flex: 1; color: #e6edf5; font-size: 13.5px; font-weight: 500; }
+.pulse { position: relative; width: 8px; height: 8px; border-radius: 50%; background: #34d399; flex: none; }
+.pulse::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #34d399; opacity: 0; animation: ping 2s cubic-bezier(0,0,.2,1) infinite; }
+.pulse.red, .pulse.red::after { background: #f87171; border-color: #f87171; }
+.pulse.red::after { background: transparent; }
+@keyframes ping { 0% { transform: scale(.6); opacity: .8; } 100% { transform: scale(1.8); opacity: 0; } }
+.net-chip { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: rgba(251, 191, 36, .14); color: #fbbf24; border: 1px solid rgba(251,191,36,.25); }
+.net-chip.mainnet { background: rgba(52, 211, 153, .14); color: #34d399; border-color: rgba(52,211,153,.25); }
+.side-meter { height: 6px; border-radius: 999px; background: rgba(255,255,255,.07); overflow: hidden; }
+.side-meter span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--glow-2), var(--glow)); box-shadow: 0 0 10px var(--glow); }
+.side-card-meta { display: flex; justify-content: space-between; font-size: 12px; color: #7d8ea4; }
+.side-card-meta .mono { font-size: 11.5px; }
+
+.side-user {
+  display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 14px;
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06);
+}
+.side-user .wallet-avatar { width: 32px; height: 32px; border-radius: 10px; flex: none; box-shadow: 0 0 0 2px rgba(255,255,255,.08); }
+.side-user-text { display: grid; flex: 1; min-width: 0; line-height: 1.3; }
+.side-user-text .mono { color: #e6edf5; font-size: 12.5px; }
+.side-user-text span:last-child { color: #7d8ea4; font-size: 12px; }
+.side-out { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; border: 0; background: transparent; color: #7d8ea4; cursor: pointer; }
+.side-out:hover { background: rgba(248,113,113,.12); color: #fca5a5; }
+.side-foot, .side-status { display: none; }
+@media (prefers-reduced-motion: reduce) { .pulse::after { animation: none; } }
+
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .side { position: static; height: auto; flex-direction: row; align-items: center; gap: 8px; padding: 10px 12px; overflow-x: auto; }
+  .side-nav { display: flex; gap: 4px; }
+  .side-link { padding: 5px 10px 5px 5px; white-space: nowrap; }
+  .side-link kbd, .side-link.on::before, .side-card, .side-user, .side .brand-word { display: none; }
+}
+/* hero headline sits at the top of the copy now that the badge is gone */
+.hero-copy h1 { margin-top: 0; } .sec-head h2, .dev-grid h2 { margin-top: 0; }

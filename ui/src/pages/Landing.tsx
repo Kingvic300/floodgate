@@ -112,9 +112,6 @@ export function Landing() {
         <div className="hero-grid-bg" aria-hidden="true" />
         <div className="mk-inner hero-layout">
           <div className="hero-copy">
-            <a className="badge" href={REPO} target="_blank" rel="noreferrer">
-              <span className="badge-dot" /> Open source on Stellar Soroban
-            </a>
             <h1>Stop a drain before it empties the vault.</h1>
             <p className="mk-lede">
               Floodgate caps how fast funds can leave a Soroban contract. Everyday payouts go through at once. Large ones wait
@@ -148,7 +145,6 @@ export function Landing() {
       <section className="mk-section" aria-labelledby="drains-title">
         <div className="mk-inner">
           <div className="sec-head">
-            <span className="eyebrow red">The problem</span>
             <h2 id="drains-title">Over $1.1 billion left three bridges in one go.</h2>
             <p className="sec-lede">
               Bridge losses rarely trickle out. The whole pool leaves before anyone can react. A rate limit bounds the loss no
@@ -176,7 +172,6 @@ export function Landing() {
       <section id="how" className="mk-section soft" aria-labelledby="how-title">
         <div className="mk-inner">
           <div className="sec-head">
-            <span className="eyebrow">How it works</span>
             <h2 id="how-title">Every payout passes through the gate.</h2>
           </div>
           <ol className="steps">
@@ -199,7 +194,6 @@ export function Landing() {
       <section id="features" className="mk-section" aria-labelledby="feat-title">
         <div className="mk-inner">
           <div className="sec-head">
-            <span className="eyebrow">Features</span>
             <h2 id="feat-title">Safety that stays out of the way.</h2>
           </div>
           <div className="bento">
@@ -219,7 +213,6 @@ export function Landing() {
       <section id="dev" className="mk-section soft" aria-labelledby="dev-title">
         <div className="mk-inner dev-grid">
           <div>
-            <span className="eyebrow">For developers</span>
             <h2 id="dev-title">Three roles. Four numbers. One call.</h2>
             <p className="sec-lede">
               Deploy with an admin, a guardian, an operator, a token and four limits. Then send your payouts through
@@ -269,7 +262,6 @@ export function Landing() {
       <section id="faq" className="mk-section" aria-labelledby="faq-title">
         <div className="mk-inner faq-grid">
           <div className="sec-head left">
-            <span className="eyebrow">FAQ</span>
             <h2 id="faq-title">Questions, answered.</h2>
             <p className="sec-lede">
               Something else? Open an issue on{" "}
