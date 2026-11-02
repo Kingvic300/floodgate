@@ -601,3 +601,13 @@ mark { background: var(--hl); color: var(--ink); padding: 0 3px; border-radius: 
 @media (max-width: 1120px) { .float-left { left: 0; } .float-right { right: 0; } }
 .card p.muted { font-size: 14.5px; }
 .ov-gauge { align-content: center; }
+
+/* ---------- full-width layout ---------- */
+:root { --gutter: clamp(20px, 4.2vw, 80px); }
+.mk-inner { max-width: none; padding-left: var(--gutter); padding-right: var(--gutter); }
+.mk-nav { padding: 12px var(--gutter) 0; }
+.nav-card { max-width: none; }
+.hero-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(40px, 5vw, 96px); }
+.cta-card { margin-left: 0; margin-right: 0; }
+.content { max-width: none; }
+@media (max-width: 900px) { .mk-nav { padding: 10px 12px 0; } }
