@@ -142,3 +142,19 @@ fn release_requires_operator_auth() {
     // The signer of the release must be the operator, not the recipient.
     assert_ne!(auths[0].0, s.user);
 }
+
+#[test]
+fn queued_event_topic_is_snake_case_name() {
+    use soroban_sdk::{testutils::Events, Symbol, TryFromVal, Val};
+    let s = setup();
+    s.vault.release(&s.user, &600);
+    let all = s.env.events().all();
+    let found = all.events().iter().any(|e| {
+        let soroban_sdk::xdr::ContractEventBody::V0(body) = &e.body;
+        body.topics.first().is_some_and(|t| {
+            let v = Val::try_from_val(&s.env, t).unwrap();
+            Symbol::try_from_val(&s.env, &v).is_ok_and(|sym| sym == Symbol::new(&s.env, "queued"))
+        })
+    });
+    assert!(found, "UI filters on topic symbol `queued`");
+}

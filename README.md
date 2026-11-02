@@ -82,8 +82,16 @@ Events: `deposited`, `sent`, `queued`, `executed`, `cancelled`, `paused_changed`
 Requirements: Rust stable, `rustup target add wasm32v1-none`, and stellar-cli v25.2.0 or newer.
 
 ```sh
-cargo test               # 8 unit tests, native
+cargo test               # 9 unit tests, native
 stellar contract build   # wasm in target/wasm32v1-none/release/
+```
+
+## Web UI
+
+`ui/` holds Floodgate Console: a web console that shows how much can leave the vault now, lists waiting releases, and runs deposit, release, pay out, cancel, pause and resume through Freighter. See [ui/README.md](ui/README.md).
+
+```sh
+cd ui && npm install && npm run dev
 ```
 
 ## Roadmap
