@@ -218,13 +218,25 @@ async function loadActivity(net: ReturnType<typeof useWallet>["net"], id: string
   };
   const pauses = { type: "contract" as const, contractIds: [id], topics: [[sym("paused_changed").toXDR("base64")]] };
   const filters = [withId, pauses];
+  // RPC servers scan a limited ledger range per request, so ask for 10,000-ledger windows
+  // in parallel across about seven days. Windows outside retention fail and are skipped.
   const s = server(net.rpcUrl);
-  let res;
-  try {
-    res = await s.getEvents({ filters, startLedger: Math.max(1, latest - 100_000), limit: 500 });
-  } catch {
-    res = await s.getEvents({ filters, startLedger: Math.max(1, latest - 10_000), limit: 500 });
-  }
+  const WINDOW = 10_000;
+  const WINDOWS = 12;
+  const results = await Promise.allSettled(
+    Array.from({ length: WINDOWS }, (_, i) => {
+      const end = latest + 1 - i * WINDOW;
+      const start = Math.max(1, end - WINDOW);
+      return s.getEvents({ filters, startLedger: start, endLedger: end, limit: 500 });
+    }),
+  );
+  const seen = new Set<string>();
+  const events = results
+    .flatMap((r) => (r.status === "fulfilled" ? r.value.events : []))
+    .filter((e) => (seen.has(e.id) ? false : (seen.add(e.id), true)))
+    .sort((a, b) => (a.id < b.id ? -1 : 1));
+  if (results.every((r) => r.status === "rejected")) throw (results[0] as PromiseRejectedResult).reason;
+  const res = { events };
 
   const out: Activity[] = [];
   for (const ev of res.events) {

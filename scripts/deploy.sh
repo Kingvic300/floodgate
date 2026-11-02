@@ -65,7 +65,12 @@ LARGE_THRESHOLD="${LARGE_THRESHOLD:-500}"
 # Testnet uses a short wait so queued releases unlock while you watch.
 if [ "$NETWORK" = testnet ]; then DELAY_SECS="${DELAY_SECS:-900}"; else DELAY_SECS="${DELAY_SECS:-86400}"; fi
 
-NET=(--rpc-url "$STELLAR_RPC_URL" --network-passphrase "$PASSPHRASE")
+# The CLI's built-in testnet profile handles slow RPC responses better than raw flags.
+if [ "$NETWORK" = testnet ] && [ "$STELLAR_RPC_URL" = "https://soroban-testnet.stellar.org" ]; then
+  NET=(--network testnet)
+else
+  NET=(--rpc-url "$STELLAR_RPC_URL" --network-passphrase "$PASSPHRASE")
+fi
 
 units() { python3 -c "from decimal import Decimal as D; import sys; print(int(D(sys.argv[1]) * 10**int(sys.argv[2])))" "$1" "$DECIMALS"; }
 
@@ -110,7 +115,7 @@ WASM="$ROOT/target/wasm32v1-none/release/soroban_floodgate.wasm"
 [ -f "$WASM" ] || die "wasm not found at $WASM"
 
 echo "Deploying…"
-ID="$(stellar contract deploy --wasm "$WASM" --source "$SOURCE" "${NET[@]}" --alias "floodgate-$NETWORK" \
+ID="$(stellar contract deploy --wasm "$WASM" --source "$SOURCE" "${NET[@]}" --alias "floodgate-vault-$NETWORK" \
   -- --admin "$ADMIN" --guardian "$GUARDIAN" --operator "$OPERATOR" --token "$TOKEN" --config "$CONFIG")"
 
 echo
@@ -119,7 +124,15 @@ echo "Explorer: https://stellar.expert/explorer/$EXPLORER/contract/$ID"
 
 if [ "$NETWORK" = testnet ] && [ "${SEED:-}" = 1 ]; then
   echo "Seeding sample activity…"
-  inv() { stellar contract invoke --id "$ID" --source "$SOURCE" "${NET[@]}" -- "$@"; }
+  # Retry on RPC timeouts; slow connections often time out while waiting for the ledger.
+  inv() {
+    for _ in 1 2 3; do
+      if out="$(stellar contract invoke --id "$ID" --source "$SOURCE" "${NET[@]}" -- "$@" 2>&1)"; then echo "$out" | tail -1; return 0; fi
+      grep -q "timeout" <<<"$out" || { echo "$out" >&2; return 1; }
+      sleep 4
+    done
+    echo "warning: $1 timed out three times; it may still have landed" >&2
+  }
   ME="$(stellar keys address "$SOURCE")"
   inv deposit --from "$ME" --amount "$(units 2000)"
   for amt in 120 75 210; do inv release --to "$ME" --amount "$(units "$amt")"; done
